@@ -3,7 +3,7 @@
 
 pkgname=ffmpeg-full
 pkgver=6.1.1
-pkgrel=3
+pkgrel=4
 _svt_hevc_ver='6cca5b932623d3a1953b165ae6b093ca1325ac44'
 _svt_vp9_ver='43ef8e5e96932421858762392adbbab57c84aebf'
 pkgdesc='Complete solution to record, convert and stream audio and video (all possible features including libfdk-aac)'
@@ -142,6 +142,8 @@ source=("https://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.xz"{,.asc}
         '070-ffmpeg-fix-lensfun-detection.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e1c1dc8347f13104bc21e4100fcf4d4dddf5e5d8'
         '080-ffmpeg-glslang14-fix.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e43615fc2ab27d562ed7e087803f4a364a7d1175'
         '090-ffmpeg-vulkan-headers1.3.279-fix.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/fef22c87ada4517441701e6e61e062c9f4399c8e'
+        '100-ffmpeg-nvenc-replace-deprecated-format-specifiers.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/43b417d516b0fabbec1f02120d948f636b8a018e'
+        '110-ffmpeg-nvenc-support-sdk-12.2-bit-depth-api.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/06c2a2c425f22e7dba5cad909737a631cc676e3f'
         'LICENSE')
 sha256sums=('8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968'
             'SKIP'
@@ -153,6 +155,8 @@ sha256sums=('8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968'
             '2b72fe52ea73fbc1ce7eb70b4c181893c761e30121879ddd5513976232d7adf8'
             'cebcc04cac957f6a9c08169765da4c7ef231ebbda225876e210fd60e8582c3d9'
             'c2ef9c35082ed2e5989428d086b7bfef1dfe9e0a85e6d259daf46f369f115483'
+            '8b5b6173c63d3dc280ba4110d91b1f303e1d0a1996956d51567962f570f770e5'
+            '8d7549121dfa6a3784f3cfbc30d8a4c997aaa17ce5e703e7a93b1f9a464134b4'
             '04a7176400907fd7db0d69116b99de49e582a6e176b3bfb36a03e50a4cb26a36')
 validpgpkeys=('FCF986EA15E6E293A5644F10B4322F04D67658D8')
 
@@ -166,6 +170,8 @@ prepare() {
     patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/070-ffmpeg-fix-lensfun-detection.patch"
     patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/080-ffmpeg-glslang14-fix.patch"
     patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/090-ffmpeg-vulkan-headers1.3.279-fix.patch"
+    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/100-ffmpeg-nvenc-replace-deprecated-format-specifiers.patch"
+    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/110-ffmpeg-nvenc-support-sdk-12.2-bit-depth-api.patch"
 }
 
 build() {

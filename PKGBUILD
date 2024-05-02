@@ -3,7 +3,7 @@
 
 pkgname=ffmpeg-full
 pkgver=6.1.1
-pkgrel=5
+pkgrel=6
 _svt_hevc_ver='6cca5b932623d3a1953b165ae6b093ca1325ac44'
 _svt_vp9_ver='43ef8e5e96932421858762392adbbab57c84aebf'
 pkgdesc='Complete solution to record, convert and stream audio and video (all possible features including libfdk-aac)'
@@ -69,6 +69,7 @@ depends=(
     'libva'
     'libvdpau'
     'libvorbis'
+    'libvpl'
     'libvpx'
     'libx11'
     'libxcb'
@@ -79,8 +80,6 @@ depends=(
     'lilv'
     'lv2'
     'ocl-icd'
-    'onevpl'
-    'onevpl-intel-gpu'
     'openal'
     'opencore-amr'
     'opencv2'
@@ -107,6 +106,7 @@ depends=(
     'vapoursynth'
     'vid.stab'
     'vmaf'
+    'vpl-runtime'
     'vulkan-icd-loader'
     'x264'
     'x265'

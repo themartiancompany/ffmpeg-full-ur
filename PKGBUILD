@@ -2,10 +2,10 @@
 # Contributor: Iacopo Isimbaldi <isiachi@rhye.it>
 
 pkgname=ffmpeg-full
-pkgver=6.1.1
-pkgrel=6
-_svt_hevc_ver='6cca5b932623d3a1953b165ae6b093ca1325ac44'
-_svt_vp9_ver='43ef8e5e96932421858762392adbbab57c84aebf'
+pkgver=7.0.1
+pkgrel=1
+_svt_hevc_ver='ed80959ebb5586aa7763c91a397d44be1798587c'
+_svt_vp9_ver='3b9a3fa43da4cc5fe60c7d22afe2be15341392ea'
 pkgdesc='Complete solution to record, convert and stream audio and video (all possible features including libfdk-aac)'
 arch=('x86_64')
 url='https://www.ffmpeg.org/'
@@ -14,7 +14,6 @@ depends=(
     'alsa-lib'
     'aom'
     'aribb24'
-    'libaribcaption'
     'avisynthplus'
     'bzip2'
     'cairo'
@@ -62,6 +61,7 @@ depends=(
     'libpulse'
     'librabbitmq-c'
     'libraw1394'
+    'librist'
     'librsvg'
     'libsoxr'
     'libssh'
@@ -87,6 +87,8 @@ depends=(
     'openjpeg2'
     'openvino'
     'opus'
+    'qrencode'
+    'quirc'
     'rav1e'
     'rtmpdump'
     'rubberband'
@@ -116,19 +118,32 @@ depends=(
     'zimg'
     'zlib'
     'zvbi'
+    # aur:
     'chromaprint-fftw'
     'davs2'
+    'libaribcaption'
     'libklvanc'
-    'librist'
     'rockchip-mpp'
     'shine'
     'uavs3d-git'
     'vo-amrwbenc'
     'xavs'
     'xavs2'
+    'xevd'
+    'xeve'
 )
-makedepends=('clang' 'amf-headers' 'ffnvcodec-headers' 'nasm' 'opencl-headers'
-             'vulkan-headers' 'decklink-sdk')
+optdepends=('nvidia-utils: for NVIDIA NVDEC/NVENC support'
+            'vpl-runtime: for Intel Quick Sync Video'
+)
+makedepends=('clang'
+             'nasm'
+             'amf-headers'
+             'ffnvcodec-headers'
+             'opencl-headers'
+             'vulkan-headers'
+             # aur:
+             'decklink-sdk'
+)
 provides=('libavcodec.so' 'libavdevice.so' 'libavfilter.so' 'libavformat.so'
           'libavutil.so' 'libpostproc.so' 'libswscale.so' 'libswresample.so'
           'ffmpeg')
@@ -140,27 +155,15 @@ source=("https://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.xz"{,.asc}
         '040-ffmpeg-add-av_stream_get_first_dts-for-chromium.patch'
         '050-ffmpeg-fix-segfault-with-avisynthplus.patch'
         '060-ffmpeg-fix-nvidia-vulkan-decoding-segfault.patch'
-        '070-ffmpeg-fix-lensfun-detection.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e1c1dc8347f13104bc21e4100fcf4d4dddf5e5d8'
-        '080-ffmpeg-glslang14-fix.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e43615fc2ab27d562ed7e087803f4a364a7d1175'
-        '090-ffmpeg-vulkan-headers1.3.279-fix.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/fef22c87ada4517441701e6e61e062c9f4399c8e'
-        '100-ffmpeg-nvenc-replace-deprecated-format-specifiers.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/43b417d516b0fabbec1f02120d948f636b8a018e'
-        '110-ffmpeg-nvenc-support-sdk-12.2-bit-depth-api.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/06c2a2c425f22e7dba5cad909737a631cc676e3f'
-        '120-ffmpeg-fix-vulkan-filters-output-format.patch'::'https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/eb7d019b326b0c34e07f2369f31e8ba266fa666b'
         'LICENSE')
-sha256sums=('8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968'
+sha256sums=('bce9eeb0f17ef8982390b1f37711a61b4290dc8c2a0c1a37b5857e85bfb0e4ff'
             'SKIP'
-            'e8fdc940474f3819b9a8d30cab8164774584c051322acb6194bcb03d56e8175a'
+            '9047e18d34716812d4ea7eafc1d0fd8b376d922a4b6b4dc20237662fcaf0c996'
             'a164ebdc4d281352bf7ad1b179aae4aeb33f1191c444bed96cb8ab333c046f81'
-            '0433016c8523c7ce159523946a76c8fa06a926f33f94b70e8de7c2082d14178c'
-            '7d5ce8058b143bae1be10a06d79ac0f1a72daf00cf648309450d83bea249a6b1'
-            '0e277c0d5e33612ca7a11025958133b17bfbe23168b0aee5bd07f674f6fd7440'
-            'f2f73793a45c9dffb033f23c1b10a612abe6528cbd06c04b06e8189d1ef208be'
-            '2b72fe52ea73fbc1ce7eb70b4c181893c761e30121879ddd5513976232d7adf8'
-            'cebcc04cac957f6a9c08169765da4c7ef231ebbda225876e210fd60e8582c3d9'
-            'c2ef9c35082ed2e5989428d086b7bfef1dfe9e0a85e6d259daf46f369f115483'
-            '8b5b6173c63d3dc280ba4110d91b1f303e1d0a1996956d51567962f570f770e5'
-            '8d7549121dfa6a3784f3cfbc30d8a4c997aaa17ce5e703e7a93b1f9a464134b4'
-            'b509207b5695dd9023ffd6f747607f774bdb417be554da3d8e974022845a5f38'
+            '59da61f2b2c556fbe0cdbf84bcc00977ee3d2447085decb21f6298226559f2aa'
+            '62509a98460d3d48afcb0ce26250def7dfed124b82acc95a3b84a2802910c1fa'
+            'b0ce071f0d9c7c5eff8e7e654e30c6f4377aa137797aeb54338c2c3a93d5472c'
+            '4a8972bc6eae02ed9f473938b6e4d9dfa544274143dd735903073ca89633b721'
             '04a7176400907fd7db0d69116b99de49e582a6e176b3bfb36a03e50a4cb26a36')
 validpgpkeys=('FCF986EA15E6E293A5644F10B4322F04D67658D8')
 
@@ -172,24 +175,21 @@ prepare() {
     patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/040-ffmpeg-add-av_stream_get_first_dts-for-chromium.patch"
     patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/050-ffmpeg-fix-segfault-with-avisynthplus.patch"
     patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/060-ffmpeg-fix-nvidia-vulkan-decoding-segfault.patch"
-    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/070-ffmpeg-fix-lensfun-detection.patch"
-    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/080-ffmpeg-glslang14-fix.patch"
-    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/090-ffmpeg-vulkan-headers1.3.279-fix.patch"
-    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/100-ffmpeg-nvenc-replace-deprecated-format-specifiers.patch"
-    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/110-ffmpeg-nvenc-support-sdk-12.2-bit-depth-api.patch"
-    patch -d "ffmpeg-${pkgver}" -Np1 -i "${srcdir}/120-ffmpeg-fix-vulkan-filters-output-format.patch"
 }
 
 build() {
     cd "ffmpeg-${pkgver}"
     printf '%s\n' '  -> Running ffmpeg configure script...'
     
-    export PKG_CONFIG_PATH="${PKG_CONFIG_PATH:+${PKG_CONFIG_PATH}:}/opt/intel/openvino/runtime/lib/intel64/pkgconfig"
+    export CFLAGS+=' -isystem/opt/cuda/include'
+    export LDFLAGS+=' -L/opt/cuda/lib64'
+    export PKG_CONFIG_PATH="/opt/intel/openvino/runtime/lib/intel64/pkgconfig${PKG_CONFIG_PATH:+":${PKG_CONFIG_PATH}"}"
+    
+    # fix build of libavfilter/asrc_flite.c with gcc 14
+    export CFLAGS+=' -Wno-incompatible-pointer-types'
     
     ./configure \
         --prefix='/usr' \
-        --extra-cflags='-I/opt/cuda/include' \
-        --extra-ldflags='-L/opt/cuda/lib64' \
         --enable-lto \
         \
         --disable-rpath \
@@ -254,6 +254,8 @@ build() {
         --enable-libopus \
         --enable-libplacebo \
         --enable-libpulse \
+        --enable-libqrencode \
+        --enable-libquirc \
         --enable-librabbitmq \
         --enable-librav1e \
         --enable-librist \
@@ -275,6 +277,7 @@ build() {
         --enable-libtesseract \
         --enable-libtheora \
         --disable-libtls \
+        --disable-libtorch \
         --enable-libtwolame \
         --enable-libuavs3d \
         --enable-libv4l2 \
@@ -286,6 +289,8 @@ build() {
         --enable-libwebp \
         --enable-libx264 \
         --enable-libx265 \
+        --enable-libxevd \
+        --enable-libxeve \
         --enable-libxavs \
         --enable-libxavs2 \
         --enable-libxcb \

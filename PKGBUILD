@@ -15,6 +15,7 @@ _pkgdesc=(
   'Complete solution to record,'
   'convert and stream audio and video'
   '(all possible features including libfdk-aac)'
+)
 pkgdesc="${_pkgdesc[*]}"
 arch=(
   'x86_64'

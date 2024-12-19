@@ -5,6 +5,10 @@
 # Maintainer : Daniel Bermond <dbermond@archlinux.org>
 # Contributor: Iacopo Isimbaldi <isiachi@rhye.it>
 
+_decklink="false"
+_openvino="false" # it has been building 
+                  # for 12 hours or so
+		  # disabled for now
 _pkg=ffmpeg
 pkgname="${_pkg}-full"
 pkgver=7.1
@@ -39,7 +43,6 @@ depends=(
     'avisynthplus'
     'bzip2'
     'cairo'
-    'celt'
     'codec2'
     'cuda'
     'dav1d'
@@ -108,10 +111,8 @@ depends=(
     'ocl-icd'
     'openal'
     'opencore-amr'
-    'opencv2'
     'openh264'
     'openjpeg2'
-    'openvino'
     'opus'
     'qrencode'
     'quirc'
@@ -143,11 +144,13 @@ depends=(
     'zimg'
     'zlib'
     'zvbi'
-    # aur:
+    # ur:
+    'celt'
     'chromaprint-fftw'
     'davs2'
     'libaribcaption'
     'libklvanc'
+    'opencv2'
     'rockchip-mpp'
     'shine'
     'uavs3d-git'
@@ -158,6 +161,11 @@ depends=(
     'xevd'
     'xeve'
 )
+if [[ "${_openvino}" == "true" ]]; then
+  depends+=(
+    'openvino'
+  )
+fi
 optdepends=(
   'nvidia-utils: for NVIDIA NVDEC/NVENC support'
   'vpl-runtime: for Intel Quick Sync Video'
@@ -170,9 +178,13 @@ makedepends=(
   'ffnvcodec-headers'
   'opencl-headers'
   'vulkan-headers'
-  # aur:
-  'decklink-sdk'
+  # ur:
 )
+if [[ "${_decklink}" == "true" ]]; then
+  makedepends+=(
+    'decklink-sdk'
+  )
+fi
 provides=(
   'libavcodec.so'
   'libavdevice.so'
@@ -267,8 +279,18 @@ build() {
     CFLAGS+=' -isystem/opt/cuda/include'
   export \
     LDFLAGS+=' -L/opt/cuda/lib64'
-  export \
-    PKG_CONFIG_PATH="/opt/intel/openvino/runtime/lib/intel64/pkgconfig${PKG_CONFIG_PATH:+":${PKG_CONFIG_PATH}"}"
+  if [[ "${_decklink}" == "true" ]]; then
+    _configure_opts+=(
+      --enable-decklink
+    )
+  fi
+  if [[ "${_openvino}" == "true" ]]; then
+    export \
+      PKG_CONFIG_PATH="/opt/intel/openvino/runtime/lib/intel64/pkgconfig${PKG_CONFIG_PATH:+":${PKG_CONFIG_PATH}"}"
+    _configure_opts+=(
+      --enable-libopenvino
+    )
+  fi
   # fix build of libavfilter/asrc_flite.c with gcc 14
   export \
     CFLAGS+=' -Wno-incompatible-pointer-types'
@@ -338,7 +360,6 @@ build() {
     --enable-libopenh264
     --enable-libopenjpeg
     --enable-libopenmpt
-    --enable-libopenvino
     --enable-libopus
     --enable-libplacebo
     --enable-libpulse
@@ -393,7 +414,6 @@ build() {
     --enable-libzvbi
     --enable-lv2
     --enable-lzma
-    --enable-decklink
     --disable-mbedtls
     --enable-libmysofa
     --enable-openal

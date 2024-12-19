@@ -46,7 +46,6 @@ depends=(
     'codec2'
     'cuda'
     'dav1d'
-    'flite1'
     'fontconfig'
     'freetype2'
     'frei0r-plugins'
@@ -61,9 +60,9 @@ depends=(
     'kvazaar'
     'ladspa'
     'lame'
-    'lcevcdec'
     'lcms2'
-    'lensfun-git'
+    # 'lensfun-git'
+    "lensfun"
     'libass'
     'libavc1394'
     'libbluray'
@@ -115,7 +114,6 @@ depends=(
     'openjpeg2'
     'opus'
     'qrencode'
-    'quirc'
     'rav1e'
     'rtmpdump'
     'rubberband'
@@ -148,12 +146,15 @@ depends=(
     'celt'
     'chromaprint-fftw'
     'davs2'
+    'flite1'
+    'lcevcdec'
     'libaribcaption'
     'libklvanc'
+    'quirc'
     'opencv2'
     'rockchip-mpp'
     'shine'
-    'uavs3d-git'
+    'uavs3d'
     'vo-amrwbenc'
     'vvenc'
     'xavs'
@@ -258,12 +259,23 @@ prepare() {
     -f \
     "${_pkg}-${pkgver}/libavcodec/libsvt_"{"hevc","vp9"}.c
   for _patch in "${_patches[@]}"; do
-    patch \
-      -d \
-        "${_pkg}-${pkgver}" \
-      -Np1 \
-      -i \
-      "${srcdir}/${_patch}"
+    if [[ "${_patch}" == "${_svt_vp9_ver_patch}" ]]; then
+      patch \
+        -d \
+          "${_pkg}-${pkgver}" \
+        -Np1 \
+        -i <(filterdiff \
+	       -i \
+	       "b/libavcodec/libsvt_vp9.c" \
+	       "${_patch}")
+    else
+      patch \
+        -d \
+          "${_pkg}-${pkgver}" \
+        -Np1 \
+        -i \
+        "${srcdir}/${_patch}"
+    fi
   done
 }
 

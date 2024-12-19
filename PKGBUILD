@@ -61,8 +61,7 @@ depends=(
     'ladspa'
     'lame'
     'lcms2'
-    # 'lensfun-git'
-    "lensfun"
+    'lensfun-git'
     'libass'
     'libavc1394'
     'libbluray'
